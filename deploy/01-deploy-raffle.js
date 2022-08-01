@@ -10,7 +10,10 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
   const chainId = network.config.chainId;
   let vrfCoordinatorV2Address, subscriptionId;
 
+  console.log({ deployer });
+
   if (developmentChains.includes(network.name)) {
+    console.log("issa dev chain");
     const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
     vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
     const transactionResponse = await vrfCoordinatorV2Mock.createSubscription();
@@ -18,6 +21,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     subscriptionId = transactionReceipt.events[0].args.subId;
     await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUB_FUND_AMOUNT);
   } else {
+    console.log("issa test chain");
     vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"];
     subscriptionId = networkConfig[chainId]["subscriptionId"];
   }

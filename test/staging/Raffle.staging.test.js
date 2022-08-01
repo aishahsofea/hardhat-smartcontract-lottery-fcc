@@ -9,18 +9,18 @@ developmentChains.includes(network.name)
 
       beforeEach(async function () {
         deployer = (await getNamedAccounts()).deployer;
-        await deployments.fixture(["all"]);
         raffle = await ethers.getContract("Raffle", deployer);
-        vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock", deployer);
         raffleEntranceFee = await raffle.getEntranceFee();
       });
 
       describe("fulfillRandomWords", function () {
         it("works with live Chainlink Keepers and Chainlink VRF, get a random winner", async function () {
           // enter the raffle
+          console.log("Setting up test...");
           const startingTimeStamp = await raffle.getLastTimeStamp();
           const accounts = await ethers.getSigners();
 
+          console.log("Setting up Listener...");
           await new Promise(async (resolve, reject) => {
             // setup listener before we enter the raffle
             // just in case the blockchain moves REALLY fast
